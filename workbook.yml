@@ -1,0 +1,11 @@
+---
+- name: Playbook Check
+  hosts: remote
+  become: yes
+  tasks:
+    - name: Install Latest version of httpd & firewall
+      yum:
+        name:
+          - httpd
+          - firewalld
+        state: latest

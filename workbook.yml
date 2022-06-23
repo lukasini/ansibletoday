@@ -9,3 +9,47 @@
           - httpd
           - firewalld
         state: latest
+
+
+
+- name: create html page
+  copy:
+  dest: "/var/www/html/index.html"
+  content: "Welcome to my webpage , damn it should work"
+
+- name: check firewall status
+  service:
+  name: firewalld
+  #permanent: yes
+  #enabled: yes
+  state: started
+  
+- name: FW rules
+  firewalld:
+    permanent: yes
+    immediate: yes
+    service: "{{ item }}"
+    state: enabled
+  with_items:
+    - http
+
+ - name: check httpd status
+   service:
+   name: httpd
+   enabled: yes
+   state: started
+   
+  - name: Confirm that 200 OK response is returned
+    uri:
+      url: "http://localhost"
+      status_code: 200---
+- name: Playbook Check
+  hosts: remote
+  become: yes
+  tasks:
+    - name: Install Latest version of httpd & firewall
+      yum:
+        name:
+          - httpd
+          - firewalld
+        state: latest
